@@ -1,0 +1,140 @@
+C:\Users\naomi>python3 --version
+'python3' não é reconhecido como um comando interno
+ou externo, um programa operável ou um arquivo em lotes.
+
+C:\Users\naomi>python3
+'python3' não é reconhecido como um comando interno
+ou externo, um programa operável ou um arquivo em lotes.
+
+C:\Users\naomi>python
+Python 3.7.4 (tags/v3.7.4:e09359112e, Jul  8 2019, 19:29:22) [MSC v.1916 32 bit (Intel)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+>>> exit()
+
+C:\Users\naomi>cd Desktop
+
+C:\Users\naomi\Desktop>cd d402-sistema-banco-master
+
+C:\Users\naomi\Desktop\d402-sistema-banco-master>python -m venv env
+
+C:\Users\naomi\Desktop\d402-sistema-banco-master>ambiente\Scripts\activate
+O sistema não pode encontrar o caminho especificado.
+
+C:\Users\naomi\Desktop\d402-sistema-banco-master>env\Scripts\activate
+
+(env) C:\Users\naomi\Desktop\d402-sistema-banco-master>pip install -r requirements.txt
+Collecting Django==2.2.3 (from -r requirements.txt (line 1))
+  Downloading https://files.pythonhosted.org/packages/39/b0/2138c31bf13e17afc32277239da53e9dfcce27bac8cb68cf1c0123f1fdf5/Django-2.2.3-py3-none-any.whl (7.5MB)
+    100% |████████████████████████████████| 7.5MB 432kB/s
+Collecting pytz==2019.1 (from -r requirements.txt (line 2))
+  Downloading https://files.pythonhosted.org/packages/3d/73/fe30c2daaaa0713420d0382b16fbb761409f532c56bdcc514bf7b6262bb6/pytz-2019.1-py2.py3-none-any.whl (510kB)
+    100% |████████████████████████████████| 512kB 84kB/s
+Collecting sqlparse==0.3.0 (from -r requirements.txt (line 3))
+  Downloading https://files.pythonhosted.org/packages/ef/53/900f7d2a54557c6a37886585a91336520e5539e3ae2423ff1102daf4f3a7/sqlparse-0.3.0-py2.py3-none-any.whl
+Installing collected packages: sqlparse, pytz, Django
+Successfully installed Django-2.2.3 pytz-2019.1 sqlparse-0.3.0
+You are using pip version 19.0.3, however version 19.2.1 is available.
+You should consider upgrading via the 'python -m pip install --upgrade pip' command.
+
+(env) C:\Users\naomi\Desktop\d402-sistema-banco-master>python manage.py runserver
+Watching for file changes with StatReloader
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+You have 19 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): admin, auth, contas, contenttypes, sessions.
+Run 'python manage.py migrate' to apply them.
+July 29, 2019 - 01:23:51
+Django version 2.2.3, using settings 'banco.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CTRL-BREAK.
+[29/Jul/2019 01:33:32] "GET / HTTP/1.1" 200 634
+Not Found: /favicon.ico
+
+veja as informacoes desse email
+email consultar
+vai para uma pagina que tem os dados
+
+url
+template
+view para renderizar
+  metodo post para consulatr recupera so o email 
+  ver se o email existe na base
+    filtrar na base chama a tabela.objects.all()
+    tabela.objects.filter()
+    filter sempre retorna queryset
+
+
+    conta ta filter so pela conta
+
+
+    {% csrf_token %} segurança para não passar mais de 1 requisicao
+
+    return render(request, '/login.html', {'pessoa': login})
+
+    email_fomulario = Pessoa.objects.filter(pessoa__email).first()
+
+*****************************************************************************
+    fez url
+       chamou a pagina de login e ometodo login
+        q esta em views 
+                from django.contrib import admin
+                from django.urls import path
+                from contas.views import mostrar_formulario_cadastro, mostrar_pessoas, login
+
+                urlpatterns = [
+                    path('admin/', admin.site.urls),
+                    path('', mostrar_formulario_cadastro),
+                    path('pessoas', mostrar_pessoas),
+                    path('login', login),
+
+
+views
+  def login(request):
+      return render(request, 'login.html', {'msg': "ola"}) ele renderiza essa pagina
+      {'msg': "ola"} ele exibe em {{msg}} no html
+
+Pra ele consultar 
+  def login(request):
+    if request.method == 'POST': #pra qd eu consultar cair nesse ir no if eu enviar no formulario
+        email_fomulario = request.POST.get('email') #o q vai ser recuperado ele so pega do formulario ele pega do formulario 
+        email_banco_dados = Pessoa.objects.filter(email=email_fomulario).first() #eu pego a tabela pessoa e filtro quero q pegue so o email da varivel de cima e mostro objecto inteiro
+        if pessoa_banco_dados is not None: # se não existir ele retorna nada(none)
+        return render(request, 'login.html', {'msg': "ola"})
+        
+    return render(request, 'login.html', {'msg': "ola"}) #pra renderizar a pagina login
+  
+
+  <form method="POST" action="/login">
+  ele vai pra essa pagina
+    
+
+
+    um recuperei a informacao 
+      entao eu vou pra pagina da pessoa filtrada
+
+    se não 
+      eu encaminho pra pagina login
+
+
+models 
+   o q eu preciso salvar
+
+
+
+
+Criar uma pagina para cadastrar a pessoa (index)
+Apenas deixar a pessoa cadastrar a conta se a pessoa existir (login)apos a pag login
+apos cadastro da conta enviar pagina com inf pessoa e conta(pessoafiltrada)
+
+
+
+def login(request):
+  if request.method == 'POST':
+    email_fomulario = request.POST.get('email')
+    pessoa_banco_dados = Pessoa.objects.filter(email=email_fomulario).first()
+    if pessoa_banco_dados is not None:
+      return render(request, 'pessoafiltrada.html', {'pessoa': pessoa_banco_dados})
+    return render(request, 'login.html', {'msg': "ops, não encontramos"})
+      
+  return render(request, 'login.html', {'msg': "ola"})
